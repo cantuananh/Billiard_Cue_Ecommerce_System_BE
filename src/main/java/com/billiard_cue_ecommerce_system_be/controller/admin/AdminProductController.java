@@ -80,4 +80,40 @@ public class AdminProductController {
             return ResponseEntity.badRequest().build();
         }
     }
+
+    @PostMapping("/upload-image")
+    public ResponseEntity<?> uploadProductImage(@RequestParam("file") org.springframework.web.multipart.MultipartFile file) {
+        try {
+            // For now, simulate file upload by returning a mock URL
+            // In production, you would save the file and return the actual URL
+            String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
+            String imageUrl = "/uploads/products/" + fileName;
+            
+            // Here you would typically save the file to disk or cloud storage
+            // File uploadDir = new File("uploads/products");
+            // if (!uploadDir.exists()) uploadDir.mkdirs();
+            // file.transferTo(new File(uploadDir, fileName));
+            
+            return ResponseEntity.ok(new ImageUploadResponse(imageUrl, fileName));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    // Simple response class for image upload
+    public static class ImageUploadResponse {
+        private String imageUrl;
+        private String fileName;
+
+        public ImageUploadResponse(String imageUrl, String fileName) {
+            this.imageUrl = imageUrl;
+            this.fileName = fileName;
+        }
+
+        public String getImageUrl() { return imageUrl; }
+        public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
+        
+        public String getFileName() { return fileName; }
+        public void setFileName(String fileName) { this.fileName = fileName; }
+    }
 }

@@ -220,11 +220,28 @@ public class ProductService {
             ProductImageRequest imgReq = imageRequests.get(i);
             ProductImage image = new ProductImage();
             image.setImageUrl(imgReq.getImageUrl());
+            image.setFileName(extractFileNameFromUrl(imgReq.getImageUrl()));
             image.setIsPrimary(imgReq.getIsPrimary());
             image.setDisplayOrder(imgReq.getDisplayOrder() != null ? imgReq.getDisplayOrder() : i);
             image.setProduct(product);
             
             productImageRepository.save(image);
         }
+    }
+    
+    private String extractFileNameFromUrl(String imageUrl) {
+        if (imageUrl == null || imageUrl.trim().isEmpty()) {
+            return "default.jpg";
+        }
+        
+        // Extract filename from URL
+        String fileName = imageUrl.substring(imageUrl.lastIndexOf('/') + 1);
+        
+        // If no extension, add .jpg
+        if (!fileName.contains(".")) {
+            fileName += ".jpg";
+        }
+        
+        return fileName;
     }
 }
