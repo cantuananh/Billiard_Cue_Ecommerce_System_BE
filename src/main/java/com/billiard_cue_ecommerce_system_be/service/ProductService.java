@@ -147,12 +147,17 @@ public class ProductService {
         productRepository.delete(product);
     }
     
-    public Product toggleProductStatus(Long id) {
+    public ProductResponse toggleProductStatus(Long id) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Sản phẩm không tồn tại"));
         
         product.setIsActive(!product.getIsActive());
-        return productRepository.save(product);
+        Product savedProduct = productRepository.save(product);
+        
+        // Return with images loaded
+        return productRepository.findByIdWithCategoryAndImages(savedProduct.getId())
+                .map(this::mapToProductResponse)
+                .orElseThrow(() -> new RuntimeException("Lỗi khi tải sản phẩm"));
     }
     
     public List<Category> getAllCategories() {

@@ -82,6 +82,16 @@ public class AdminProductController {
         }
     }
 
+    @PatchMapping("/{id}/toggle-status")
+    public ResponseEntity<ProductResponse> toggleProductStatus(@PathVariable Long id) {
+        try {
+            ProductResponse product = productService.toggleProductStatus(id);
+            return ResponseEntity.ok(product);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
     @PostMapping("/upload-image")
     public ResponseEntity<?> uploadProductImage(@RequestParam("file") org.springframework.web.multipart.MultipartFile file) {
         try {
