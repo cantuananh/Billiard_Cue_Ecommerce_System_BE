@@ -1,7 +1,12 @@
 package com.billiard_cue_ecommerce_system_be.controller.admin;
 
-import com.billiard_cue_ecommerce_system_be.entity.Category;
+import com.billiard_cue_ecommerce_system_be.dto.request.CategoryFilterRequest;
+import com.billiard_cue_ecommerce_system_be.dto.request.CreateCategoryRequest;
+import com.billiard_cue_ecommerce_system_be.dto.request.UpdateCategoryRequest;
+import com.billiard_cue_ecommerce_system_be.dto.response.CategoryResponse;
+import com.billiard_cue_ecommerce_system_be.dto.response.PageResponse;
 import com.billiard_cue_ecommerce_system_be.service.CategoryService;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,53 +15,85 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/admin/products")
+@RequestMapping("/api/admin/categories")
 @RequiredArgsConstructor
 @CrossOrigin(origins = "*")
 public class AdminCategoryController {
     
     private final CategoryService categoryService;
 
-    @GetMapping("/categories")
-    public ResponseEntity<List<Category>> getAllCategories() {
-        List<Category> categories = categoryService.getActiveCategories();
+    @GetMapping
+    public ResponseEntity<PageResponse<CategoryResponse>> getAllCategories(
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) Boolean isActive,
+            @RequestParam(defaultValue = "name") String sortBy,
+            @RequestParam(defaultValue = "asc") String sortDir,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        
+        CategoryFilterRequest filter = CategoryFilterRequest.builder()
+                .search(search)
+                .isActive(isActive)
+                .sortBy(sortBy)
+                .sortDir(sortDir)
+                .build();
+        
+        PageResponse<CategoryResponse> categories = categoryService.getAllCategories(filter, page, size);
         return ResponseEntity.ok(categories);
     }
-
-    @GetMapping("/categories/{id}")
-    public ResponseEntity<Category> getCategoryById(@PathVariable Long id) {
-        Optional<Category> category = categoryService.getCategoryById(id);
+    
+    @GetMapping("/active")
+    public ResponseEntity<List<CategoryResponse>> getActiveCategories() {
+        List<CategoryResponse> categories = categoryService.getActiveCategories();
+        return ResponseEntity.ok(categories);
+    }
+    
+    @GetMapping("/{id}")
+    public ResponseEntity<CategoryResponse> getCategoryById(@PathVariable Long id) {
+        Optional<CategoryResponse> category = categoryService.getCategoryById(id);
         return category.map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
-
-    @PostMapping("/categories")
-    public ResponseEntity<Category> createCategory(@RequestBody Category category) {
+    
+    @PostMapping
+    public ResponseEntity<CategoryResponse> createCategory(@RequestBody CreateCategoryRequest request) {
         try {
-            Category createdCategory = categoryService.createCategory(category);
-            return ResponseEntity.ok(createdCategory);
+            CategoryResponse category = categoryService.createCategory(request);
+            return ResponseEntity.ok(category);
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().build();
         }
     }
-
-    @PutMapping("/categories/{id}")
-    public ResponseEntity<Category> updateCategory(@PathVariable Long id, @RequestBody Category categoryDetails) {
+    
+    @PutMapping("/{id}")
+    public ResponseEntity<CategoryResponse> updateCategory(
+            @PathVariable Long id, 
+            @RequestBody UpdateCategoryRequest request) {
         try {
-            Category updatedCategory = categoryService.updateCategory(id, categoryDetails);
-            return ResponseEntity.ok(updatedCategory);
+            CategoryResponse category = categoryService.updateCategory(id, request);
+            return ResponseEntity.ok(category);
         } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.notFound().build();
         }
     }
-
-    @DeleteMapping("/categories/{id}")
+    
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCategory(@PathVariable Long id) {
         try {
             categoryService.deleteCategory(id);
-            return ResponseEntity.ok().build();
+            return ResponseEntity.noContent().build();
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().build();
+        }
+    }
+    
+    @PatchMapping("/{id}/toggle-status")
+    public ResponseEntity<CategoryResponse> toggleCategoryStatus(@PathVariable Long id) {
+        try {
+            CategoryResponse category = categoryService.toggleCategoryStatus(id);
+            return ResponseEntity.ok(category);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
         }
     }
 }
