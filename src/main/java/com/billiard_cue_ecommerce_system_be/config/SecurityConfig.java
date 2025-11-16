@@ -49,11 +49,13 @@ public class SecurityConfig {
                 
                 // Public endpoints
                 .requestMatchers("/api/auth/**").permitAll()
+                .requestMatchers("/api/public/**").permitAll()
                 .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                 .requestMatchers("/actuator/**").permitAll()
                 
                 // Static files (uploaded images)
                 .requestMatchers("/uploads/**").permitAll()
+                .requestMatchers("/api/uploads/**").permitAll()
                 
                 // Temporarily allow admin endpoints for testing
                 .requestMatchers("/api/admin/**").permitAll()

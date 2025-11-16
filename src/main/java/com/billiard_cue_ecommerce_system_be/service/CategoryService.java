@@ -49,8 +49,10 @@ public class CategoryService {
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         };
         
-        // Tạo Sort
-        Sort sort = Sort.by(Sort.Direction.fromString(filter.getSortDir()), filter.getSortBy());
+        // Tạo Sort với default values
+        String sortBy = filter.getSortBy() != null ? filter.getSortBy() : "name";
+        String sortDir = filter.getSortDir() != null ? filter.getSortDir() : "asc";
+        Sort sort = Sort.by(Sort.Direction.fromString(sortDir), sortBy);
         Pageable pageable = PageRequest.of(page, size, sort);
         
         // Query với specification
