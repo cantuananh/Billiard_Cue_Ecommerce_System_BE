@@ -24,6 +24,8 @@ public class ProductResponse {
     private Integer stockQuantity;
     private String imageUrl; // Keep for backward compatibility
     private Boolean isActive;
+    private BigDecimal rating;
+    private Integer reviewCount;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     

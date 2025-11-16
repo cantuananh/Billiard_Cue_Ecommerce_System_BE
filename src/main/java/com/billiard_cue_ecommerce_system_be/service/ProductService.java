@@ -175,6 +175,8 @@ public class ProductService {
         response.setSku(product.getSku());
         response.setImageUrl(product.getImageUrl());
         response.setIsActive(product.getIsActive());
+        response.setRating(product.getRating());
+        response.setReviewCount(product.getReviewCount());
         response.setCategoryId(product.getCategory() != null ? product.getCategory().getId() : null);
         response.setCategoryName(product.getCategory() != null ? product.getCategory().getName() : null);
         response.setCreatedAt(product.getCreatedAt());
