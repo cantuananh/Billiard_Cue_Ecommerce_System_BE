@@ -3,6 +3,7 @@ package com.billiard_cue_ecommerce_system_be.controller.admin;
 import com.billiard_cue_ecommerce_system_be.dto.request.CreateProductRequest;
 import com.billiard_cue_ecommerce_system_be.dto.request.ProductFilterRequest;
 import com.billiard_cue_ecommerce_system_be.dto.request.UpdateProductRequest;
+import com.billiard_cue_ecommerce_system_be.dto.response.ImageUploadResponse;
 import com.billiard_cue_ecommerce_system_be.dto.response.PageResponse;
 import com.billiard_cue_ecommerce_system_be.dto.response.ProductResponse;
 import com.billiard_cue_ecommerce_system_be.service.ProductService;
@@ -84,19 +85,34 @@ public class AdminProductController {
     @PostMapping("/upload-image")
     public ResponseEntity<?> uploadProductImage(@RequestParam("file") org.springframework.web.multipart.MultipartFile file) {
         try {
-            // For now, simulate file upload by returning a mock URL
-            // In production, you would save the file and return the actual URL
+            if (file.isEmpty()) {
+                return ResponseEntity.badRequest().body("File is empty");
+            }
+            
+            // Validate file type
+            String contentType = file.getContentType();
+            if (contentType == null || !contentType.startsWith("image/")) {
+                return ResponseEntity.badRequest().body("File must be an image");
+            }
+            
+            // Create filename
             String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
             String imageUrl = "/uploads/products/" + fileName;
             
-            // Here you would typically save the file to disk or cloud storage
-            // File uploadDir = new File("uploads/products");
-            // if (!uploadDir.exists()) uploadDir.mkdirs();
-            // file.transferTo(new File(uploadDir, fileName));
+            // Create upload directory if it doesn't exist
+            java.io.File uploadDir = new java.io.File(System.getProperty("user.dir"), "uploads/products");
+            if (!uploadDir.exists()) {
+                uploadDir.mkdirs();
+            }
+            
+            // Save file to disk
+            java.io.File destinationFile = new java.io.File(uploadDir, fileName);
+            file.transferTo(destinationFile);
             
             return ResponseEntity.ok(new ImageUploadResponse(imageUrl, fileName));
         } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body("Failed to upload file: " + e.getMessage());
         }
     }
 
