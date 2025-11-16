@@ -45,4 +45,9 @@ public class ProductResponse {
         }
         return imageUrl; // Fallback to old field
     }
+    
+    // Alias for frontend compatibility
+    public Integer getStock() {
+        return stockQuantity;
+    }
 }
