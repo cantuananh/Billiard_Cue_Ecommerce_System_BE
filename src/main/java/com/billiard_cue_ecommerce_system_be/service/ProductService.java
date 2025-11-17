@@ -47,6 +47,8 @@ public class ProductService {
             filter.getSearch(),
             filter.getCategoryId(),
             filter.getIsActive(),
+            filter.getMinPrice(),
+            filter.getMaxPrice(),
             pageable
         );
         
@@ -74,8 +76,11 @@ public class ProductService {
                 .orElseThrow(() -> new RuntimeException("Danh mục không tồn tại"));
         
         // Check if SKU already exists
-        if (request.getSku() != null && productRepository.findBySku(request.getSku()).isPresent()) {
-            throw new RuntimeException("SKU đã tồn tại");
+        if (request.getSku() != null && !request.getSku().trim().isEmpty()) {
+            String trimmedSku = request.getSku().trim();
+            if (productRepository.findBySku(trimmedSku).isPresent()) {
+                throw new RuntimeException("SKU đã tồn tại");
+            }
         }
         
         Product product = new Product();
@@ -84,7 +89,7 @@ public class ProductService {
         product.setPrice(request.getPrice());
         product.setOriginalPrice(request.getOriginalPrice());
         product.setStockQuantity(request.getStockQuantity());
-        product.setSku(request.getSku());
+        product.setSku(request.getSku() != null ? request.getSku().trim() : null);
         product.setImageUrl(request.getImageUrl()); // Backward compatibility
         product.setIsActive(request.getIsActive());
         product.setCategory(category);
@@ -112,12 +117,16 @@ public class ProductService {
         }
         
         // Check if SKU already exists (exclude current product)
-        if (request.getSku() != null) {
-            Optional<Product> existingProduct = productRepository.findBySku(request.getSku());
-            if (existingProduct.isPresent() && !existingProduct.get().getId().equals(id)) {
-                throw new RuntimeException("SKU đã tồn tại");
+        if (request.getSku() != null && !request.getSku().trim().isEmpty()) {
+            String trimmedSku = request.getSku().trim();
+            // Only check if SKU is different from current product SKU
+            if (!trimmedSku.equals(product.getSku())) {
+                Optional<Product> existingProduct = productRepository.findBySku(trimmedSku);
+                if (existingProduct.isPresent() && !existingProduct.get().getId().equals(id)) {
+                    throw new RuntimeException("SKU đã tồn tại");
+                }
             }
-            product.setSku(request.getSku());
+            product.setSku(trimmedSku);
         }
         
         if (request.getName() != null) product.setName(request.getName());

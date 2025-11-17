@@ -14,6 +14,8 @@ public class ProductFilterRequest {
     private String search;
     private Long categoryId;
     private Boolean isActive;
+    private Double minPrice;
+    private Double maxPrice;
     
     @Builder.Default
     private String sortBy = "id";

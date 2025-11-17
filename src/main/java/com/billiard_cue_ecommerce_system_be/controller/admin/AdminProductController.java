@@ -52,23 +52,25 @@ public class AdminProductController {
     }
 
     @PostMapping
-    public ResponseEntity<ProductResponse> createProduct(@Valid @RequestBody CreateProductRequest request) {
+    public ResponseEntity<?> createProduct(@Valid @RequestBody CreateProductRequest request) {
         try {
             ProductResponse product = productService.createProduct(request);
             return ResponseEntity.ok(product);
         } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().build();
+            e.printStackTrace(); // Log the error for debugging
+            return ResponseEntity.badRequest().body("Error creating product: " + e.getMessage());
         }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProductResponse> updateProduct(@PathVariable Long id, 
+    public ResponseEntity<?> updateProduct(@PathVariable Long id, 
                                                         @Valid @RequestBody UpdateProductRequest request) {
         try {
             ProductResponse product = productService.updateProduct(id, request);
             return ResponseEntity.ok(product);
         } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().build();
+            e.printStackTrace(); // Log the error for debugging
+            return ResponseEntity.badRequest().body("Error updating product: " + e.getMessage());
         }
     }
 

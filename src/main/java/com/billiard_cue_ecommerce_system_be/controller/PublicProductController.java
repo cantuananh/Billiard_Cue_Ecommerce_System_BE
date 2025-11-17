@@ -24,12 +24,16 @@ public class PublicProductController {
             @RequestParam(defaultValue = "20") int size,
             @RequestParam(required = false) Long categoryId,
             @RequestParam(required = false) String search,
+            @RequestParam(required = false) Double minPrice,
+            @RequestParam(required = false) Double maxPrice,
             @RequestParam(defaultValue = "createdAt") String sortBy,
             @RequestParam(defaultValue = "desc") String sortDir) {
         
         ProductFilterRequest filterRequest = new ProductFilterRequest();
         filterRequest.setCategoryId(categoryId);
         filterRequest.setSearch(search);
+        filterRequest.setMinPrice(minPrice);
+        filterRequest.setMaxPrice(maxPrice);
         filterRequest.setSortBy(sortBy);
         filterRequest.setSortDir(sortDir);
         
