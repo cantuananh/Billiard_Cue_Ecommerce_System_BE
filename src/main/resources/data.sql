@@ -1,0 +1,22 @@
+-- Insert sample categories
+INSERT IGNORE INTO categories (id, name, description, is_active, created_at, updated_at) VALUES
+(1, 'Cơ bi-a Pool', 'Cơ bi-a dành cho bàn Pool 8 bi, 9 bi', true, NOW(), NOW()),
+(2, 'Cơ bi-a Carom', 'Cơ bi-a dành cho bàn Carom 3 băng', true, NOW(), NOW()),
+(3, 'Cơ bi-a Snooker', 'Cơ bi-a dành cho bàn Snooker', true, NOW(), NOW()),
+(4, 'Cơ Break & Jump', 'Cơ bi-a chuyên dụng cho Break và Jump shot', true, NOW(), NOW()),
+(5, 'Cơ One Piece', 'Cơ bi-a nguyên khối, phù hợp cho người mới', true, NOW(), NOW()),
+(6, 'Cơ Two Piece', 'Cơ bi-a 2 khúc, có thể tháo lắp', true, NOW(), NOW()),
+(7, 'Cơ Three Piece', 'Cơ bi-a 3 khúc, dễ dàng mang theo', true, NOW(), NOW()),
+(8, 'Phấn bi-a', 'Phấn đánh cơ bi-a các loại', true, NOW(), NOW()),
+(9, 'Găng tay', 'Găng tay bi-a chuyên nghiệp', true, NOW(), NOW()),
+(10, 'Hộp đựng cơ', 'Túi và hộp đựng cơ bi-a', true, NOW(), NOW()),
+(11, 'Tip cơ bi-a', 'Đầu cơ bi-a thay thế', true, NOW(), NOW()),
+(12, 'Bàn bi-a Pool', 'Bàn bi-a Pool 8 bi, 9 bi', true, NOW(), NOW()),
+(13, 'Bàn bi-a Carom', 'Bàn bi-a Carom 3 băng', true, NOW(), NOW()),
+(14, 'Bàn bi-a Snooker', 'Bàn bi-a Snooker chuyên nghiệp', true, NOW(), NOW()),
+(15, 'Phụ kiện bàn bi-a', 'Đèn, rack, brush và các phụ kiện bàn bi-a', true, NOW(), NOW()),
+(16, 'Bi bi-a', 'Bộ bi bi-a Pool, Carom, Snooker', true, NOW(), NOW()),
+(17, 'Giá đỡ cơ', 'Giá đỡ cơ bi-a treo tường', true, NOW(), NOW()),
+(18, 'Cơ Vintage', 'Cơ bi-a cổ điển, phiên bản giới hạn', true, NOW(), NOW()),
+(19, 'Cơ Professional', 'Cơ bi-a chuyên nghiệp cao cấp', true, NOW(), NOW()),
+(20, 'Cơ Custom', 'Cơ bi-a thiết kế riêng theo yêu cầu', true, NOW(), NOW());
