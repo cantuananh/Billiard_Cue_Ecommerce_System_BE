@@ -36,6 +36,7 @@ public class PublicProductController {
         filterRequest.setMaxPrice(maxPrice);
         filterRequest.setSortBy(sortBy);
         filterRequest.setSortDir(sortDir);
+        filterRequest.setIsActive(true);
         
         PageResponse<ProductResponse> products = productService.getAllProducts(filterRequest, page, size);
         
@@ -60,6 +61,7 @@ public class PublicProductController {
         ProductFilterRequest filterRequest = new ProductFilterRequest();
         filterRequest.setSortBy("createdAt");
         filterRequest.setSortDir("desc");
+        filterRequest.setIsActive(true);
         
         PageResponse<ProductResponse> featuredProducts = productService.getAllProducts(filterRequest, 0, limit);
         
@@ -76,6 +78,7 @@ public class PublicProductController {
         filterRequest.setCategoryId(categoryId);
         filterRequest.setSortBy("createdAt");
         filterRequest.setSortDir("desc");
+        filterRequest.setIsActive(true);
         
         PageResponse<ProductResponse> products = productService.getAllProducts(filterRequest, page, size);
         
@@ -92,6 +95,7 @@ public class PublicProductController {
         filterRequest.setSearch(search);
         filterRequest.setSortBy("createdAt");
         filterRequest.setSortDir("desc");
+        filterRequest.setIsActive(true);
         
         PageResponse<ProductResponse> products = productService.getAllProducts(filterRequest, page, size);
         
