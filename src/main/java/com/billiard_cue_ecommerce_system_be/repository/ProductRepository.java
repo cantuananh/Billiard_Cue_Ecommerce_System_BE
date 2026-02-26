@@ -13,8 +13,17 @@ import java.util.Optional;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
     
-    @Query("SELECT p FROM Product p LEFT JOIN FETCH p.category " +
-           "WHERE (:search IS NULL OR " +
+    @Query(value = "SELECT p FROM Product p LEFT JOIN FETCH p.category " +
+           "WHERE (NULLIF(:search, '') IS NULL OR " +
+           "LOWER(p.name) LIKE LOWER(CONCAT('%', :search, '%')) OR " +
+           "LOWER(p.sku) LIKE LOWER(CONCAT('%', :search, '%')) OR " +
+           "LOWER(p.description) LIKE LOWER(CONCAT('%', :search, '%'))) " +
+           "AND (:categoryId IS NULL OR p.category.id = :categoryId) " +
+           "AND (:isActive IS NULL OR p.isActive = :isActive) " +
+           "AND (:minPrice IS NULL OR p.price >= :minPrice) " +
+           "AND (:maxPrice IS NULL OR p.price <= :maxPrice)",
+           countQuery = "SELECT count(p) FROM Product p LEFT JOIN p.category " +
+           "WHERE (NULLIF(:search, '') IS NULL OR " +
            "LOWER(p.name) LIKE LOWER(CONCAT('%', :search, '%')) OR " +
            "LOWER(p.sku) LIKE LOWER(CONCAT('%', :search, '%')) OR " +
            "LOWER(p.description) LIKE LOWER(CONCAT('%', :search, '%'))) " +
