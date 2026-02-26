@@ -57,8 +57,8 @@ public class SecurityConfig {
                 .requestMatchers("/uploads/**").permitAll()
                 .requestMatchers("/api/uploads/**").permitAll()
                 
-                // Temporarily allow admin endpoints for testing
-                .requestMatchers("/api/admin/**").permitAll()
+                // Admin endpoints - require ADMIN role
+                .requestMatchers("/api/admin/**").hasRole("ADMIN")
                 
                 // Staff endpoints  
                 .requestMatchers("/api/staff/**").hasAnyRole("ADMIN", "STAFF")

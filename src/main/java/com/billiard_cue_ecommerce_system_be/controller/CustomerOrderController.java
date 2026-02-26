@@ -2,6 +2,7 @@ package com.billiard_cue_ecommerce_system_be.controller;
 
 import com.billiard_cue_ecommerce_system_be.dto.request.CreateOrderRequest;
 import com.billiard_cue_ecommerce_system_be.dto.response.OrderResponse;
+import com.billiard_cue_ecommerce_system_be.entity.User;
 import com.billiard_cue_ecommerce_system_be.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -87,16 +88,9 @@ public class CustomerOrderController {
         return ResponseEntity.ok(order);
     }
     
-    // Helper method to extract user ID from authentication
-    // This should be implemented based on your JWT token structure
+    // Helper method to extract user ID from authentication principal (User entity implements UserDetails)
     private Long getUserIdFromAuthentication(Authentication authentication) {
-        // This is a placeholder implementation
-        // In a real scenario, you would extract the user ID from JWT token
-        // or use a service to find user by email/username
-        
-        // You should implement a method in UserService to find user ID by email
-        // For now, returning a placeholder
-        // TODO: Implement proper user ID extraction from JWT or authentication
-        return 1L; // This should be replaced with actual user ID
+        User user = (User) authentication.getPrincipal();
+        return user.getId();
     }
 }
